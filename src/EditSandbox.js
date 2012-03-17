@@ -1,7 +1,38 @@
-/* Script para que o link para a página de testes abra a primeira que estiver vazia */
-$('#n-testpage').click(function(e){
+/**
+ * Script para que o link para a página de testes da Wikipédia abra a primeira que estiver vazia
+ * @author: [[User:Helder.wiki]]
+ * @tracking: [[Special:GlobalUsage/User:Helder.wiki/Tools/EditSandbox.js]] ([[File:User:Helder.wiki/Tools/EditSandbox.js]])
+ */
+/*jslint browser: true, white: true, devel: true, plusplus: true */
+/*global jQuery, mediaWiki, injectSpinner */
+( function ( $, mw, undefined ) {
+'use strict';
+
+function findFreeSandBoxAndGo ( data ) {
+	var	page, i,
+		query = data.query;
+	if ( data.error !== undefined ) {
+		alert( 'Erro da API: ' + data.error.code + '. ' + data.error.info );
+	} else if ( query && query.pages && query.pageids ) {
+		for( i = 0; i < query.pageids.length; i++ ){
+			page = query.pages[ query.pageids[i] ];
+			if( page.revisions[0]['*'].length === 142 ){
+				location.href = mw.util.wikiGetlink( page.title ) + '?action=edit';
+				return true;
+			}
+		}
+		alert( 'Todas as páginas de teste estão ocupadas' );
+	} else {
+		alert( 'Houve um erro desconhecido ao consultar a API da Wikipédia' );
+	}
+}
+
+function getSandoBoxesContent(e){
+	if( e.which !== 1 /* left button */ ){
+		return;
+	}
 	e.preventDefault();
-	injectSpinner( this, 'testpage' );
+	injectSpinner( $('#n-testpage').get(0), 'testpage' );
 	$.ajax({
 		url: mw.util.wikiScript( 'api' ),
 		dataType: 'json',
@@ -13,25 +44,17 @@ $('#n-testpage').click(function(e){
 			'rvprop': 'content',
 			'indexpageids': '1'
 		},
-		success: function( data ) {
-			var page, query = data.query;
-			if ( 'error' in data ) {
-				alert( 'Erro da API: ' + data.error.code + '. ' + data.error.info );
-			} else if ( query && query.pages && query.pageids ) {
-				for( var i = 0; i < query.pageids.length; i++ ){
-					page = query.pages[ query.pageids[i] ];
-					if( page.revisions[0]['*'].length === 142 ){
-						location.href = mw.util.wikiGetlink( page.title ) + '?action=edit';
-						return true;
-					}
-				}
-				alert( 'Todas as páginas de teste estão ocupadas' );
-			} else {
-				alert( 'Houve um erro desconhecido ao consultar a API da Wikipédia' );
-			}
-		},
+		success: findFreeSandBoxAndGo,
 		error: function() {
-			alert( 'Houve um erro ao usar ajax para obter o conteúdo das páginas de testes.' );
+			alert( 'Houve um erro ao usar AJAX para obter o conteúdo das páginas de testes.' );
 		}
 	});
+}
+
+$(function(){
+	$('#n-testpage')
+		.click( getSandoBoxesContent )
+		.find('a').attr('href', mw.util.wikiGetlink( 'Wikipédia:Página de testes/1' ) + '?action=edit');
 });
+
+}( jQuery, mediaWiki ) );
