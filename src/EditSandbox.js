@@ -4,12 +4,12 @@
  * @tracking: [[Special:GlobalUsage/User:Helder.wiki/Tools/EditSandbox.js]] ([[File:User:Helder.wiki/Tools/EditSandbox.js]])
  */
 /*jslint browser: true, white: true, devel: true, plusplus: true */
-/*global jQuery, mediaWiki, injectSpinner */
-( function ( $, mw, undefined ) {
+/*global mediaWiki, jQuery, injectSpinner */
+( function ( mw, $ ) {
 'use strict';
 
 function findFreeSandBoxAndGo ( data ) {
-	var	page, i,
+	var page, i,
 		query = data.query;
 	if ( data.error !== undefined ) {
 		alert( 'Erro da API: ' + data.error.code + '. ' + data.error.info );
@@ -43,18 +43,18 @@ function getSandoBoxesContent(e){
 			'prop': 'revisions',
 			'rvprop': 'content',
 			'indexpageids': '1'
-		},
-		success: findFreeSandBoxAndGo,
-		error: function() {
-			alert( 'Houve um erro ao usar AJAX para obter o conteúdo das páginas de testes.' );
 		}
+	})
+	.done( findFreeSandBoxAndGo )
+	.fail( function() {
+		alert( 'Houve um erro ao usar AJAX para obter o conteúdo das páginas de testes.' );
 	});
 }
 
 $(function(){
 	$('#n-testpage')
 		.click( getSandoBoxesContent )
-		.find('a').attr('href', mw.util.wikiGetlink( 'Wikipédia:Página de testes/1' ) + '?action=edit');
+		.find('a').attr('href', mw.util.wikiGetlink( 'WP:Página de testes/1' ) + '?action=edit');
 });
 
-}( jQuery, mediaWiki ) );
+}( mediaWiki, jQuery ) );
