@@ -17,7 +17,7 @@ function findFreeSandBoxAndGo ( data ) {
 		for( i = 0; i < query.pageids.length; i++ ){
 			page = query.pages[ query.pageids[i] ];
 			if( page.revisions[0]['*'].length === 142 ){
-				location.href = mw.util.wikiGetlink( page.title ) + '?action=edit';
+				location.href = mw.util.getUrl( page.title ) + '?action=edit';
 				return true;
 			}
 		}
@@ -33,7 +33,7 @@ function getSandoBoxesContent(e){
 	}
 	e.preventDefault();
 	injectSpinner( $('#n-testpage').get(0), 'testpage' );
-	$.ajax({
+	$.ajax( {
 		url: mw.util.wikiScript( 'api' ),
 		dataType: 'json',
 		data: {
@@ -44,17 +44,17 @@ function getSandoBoxesContent(e){
 			'rvprop': 'content',
 			'indexpageids': '1'
 		}
-	})
+	} )
 	.done( findFreeSandBoxAndGo )
 	.fail( function() {
 		alert( 'Houve um erro ao usar AJAX para obter o conteúdo das páginas de testes.' );
-	});
+	} );
 }
 
-$(function(){
-	$('#n-testpage')
+$( function(){
+	$( '#n-testpage' )
 		.click( getSandoBoxesContent )
-		.find('a').attr('href', mw.util.wikiGetlink( 'WP:Página de testes/1' ) + '?action=edit');
-});
+		.find( 'a' ).attr( 'href', mw.util.wikiGetlink( 'WP:Página de testes/1' ) + '?action=edit' );
+} );
 
 }( mediaWiki, jQuery ) );
