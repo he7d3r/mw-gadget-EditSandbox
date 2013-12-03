@@ -54,7 +54,7 @@ function getSandoBoxesContent(e){
 $( function(){
 	$( '#n-testpage' )
 		.click( getSandoBoxesContent )
-		.find( 'a' ).attr( 'href', mw.util.wikiGetlink( 'WP:Página de testes/1' ) + '?action=edit' );
+		.find( 'a' ).attr( 'href', mw.util.getUrl( 'WP:Página de testes/1' ) + '?action=edit' );
 } );
 
 }( mediaWiki, jQuery ) );
