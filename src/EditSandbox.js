@@ -4,7 +4,7 @@
  * @tracking: [[Special:GlobalUsage/User:Helder.wiki/Tools/EditSandbox.js]] ([[File:User:Helder.wiki/Tools/EditSandbox.js]])
  */
 /*jslint browser: true, white: true, devel: true, plusplus: true */
-/*global mediaWiki, jQuery, injectSpinner */
+/*global mediaWiki, jQuery */
 ( function ( mw, $ ) {
 'use strict';
 
@@ -32,7 +32,7 @@ function getSandoBoxesContent(e){
 		return;
 	}
 	e.preventDefault();
-	injectSpinner( $('#n-testpage').get(0), 'testpage' );
+	$( '#n-testpage' ).injectSpinner( 'testpage' );
 	$.ajax( {
 		url: mw.util.wikiScript( 'api' ),
 		dataType: 'json',
@@ -53,7 +53,9 @@ function getSandoBoxesContent(e){
 
 $( function(){
 	$( '#n-testpage' )
-		.click( getSandoBoxesContent )
+		.click( function(){
+			mw.loader.using( [ 'jquery.spinner' ], getSandoBoxesContent );
+		} )
 		.find( 'a' ).attr( 'href', mw.util.getUrl( 'WP:Página de testes/1' ) + '?action=edit' );
 } );
 
