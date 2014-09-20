@@ -2,7 +2,6 @@
  * Script para que o link para a página de testes da Wikipédia abra a primeira que estiver vazia
  * @author: Helder (https://github.com/he7d3r)
  * @license: CC BY-SA 3.0 <https://creativecommons.org/licenses/by-sa/3.0/>
- * @tracking: [[Special:GlobalUsage/User:Helder.wiki/Tools/EditSandbox.js]] ([[File:User:Helder.wiki/Tools/EditSandbox.js]])
  */
 /*jslint browser: true, white: true, devel: true, plusplus: true */
 /*global mediaWiki, jQuery */
