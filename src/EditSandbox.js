@@ -25,11 +25,7 @@
 		}
 	}
 
-	function getSandoBoxesContent(e) {
-		if ( e.which !== 1 /* left button */ ) {
-			return;
-		}
-		e.preventDefault();
+	function getSandoBoxesContent() {
 		$( '#n-testpage' ).injectSpinner( 'testpage' );
 		$.ajax( {
 			url: mw.util.wikiScript( 'api' ),
@@ -51,7 +47,11 @@
 
 	$( function () {
 		$( '#n-testpage' )
-			.click( function () {
+			.click( function (e) {
+				if ( e.which !== 1 /* left button */ ) {
+					return;
+				}
+				e.preventDefault();
 				mw.loader.using( [ 'jquery.spinner' ], getSandoBoxesContent );
 			} )
 			.find( 'a' ).attr( 'href', mw.util.getUrl( 'WP:Página de testes/1' ) + '?action=edit' );
